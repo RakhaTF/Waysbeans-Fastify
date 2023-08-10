@@ -5,7 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -e ts --exec \"ts-node -r tsconfig-paths/register -r ./src/index.ts\""
+    "dev": "nodemon -e ts --exec \"ts-node -r tsconfig-paths/register -r ./src/index.ts\"",
+    "entity:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js entity:create -n",
+    "migrate:generate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:generate -n",
+    "migrate:run": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
+    "migrate:revert": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:revert",
+    "schema:drop": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm schema:drop",
+    "typeorm": "typeorm-ts-node-esm"
+  },
+  "cli": {
+    "entitiesDir": "src/entity",
+    "migrationsDir": "src/migration",
+    "subscribersDir": "src/subscriber"
   },
   "repository": {
     "type": "git",
@@ -29,7 +40,9 @@
     "dotenv": "^16.3.1",
     "fastify": "^4.21.0",
     "pino-pretty": "^10.2.0",
-    "ts-node": "^10.9.1"
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.9.1",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@types/node": "^20.4.9",
