@@ -23,10 +23,10 @@ export class User {
   @Column({ nullable: true })
   isDeleted: boolean;
 
-  @CreateDateColumn({ default: () => "NOW()" })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ default: () => "NOW()" })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @OneToOne(() => DeletedUser)

@@ -8,6 +8,6 @@ export class DeletedUser {
     @Column()
     userId: number;
 
-    @Column({ default: () => "NOW()" })
+    @Column()
     deletedAt: Date;
 }

@@ -31,7 +31,7 @@ const routes: RouteOptions[] = [
   }
 ];
 
-export default async function FastifyUserRoute(
+export default async function UserRoute(
   fastify: FastifyInstance,
   options: FastifyPluginOptions
 ) {
