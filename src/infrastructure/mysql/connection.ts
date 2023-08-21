@@ -8,7 +8,8 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: ["src/entity/**/*.ts"],
+  entities: ["src/domain/entity/**/*.ts"],
   migrations: ["src/migration/**/*.ts"],
   migrationsTableName: "custom_migration_table",
+  synchronize:true,
 });

@@ -1,12 +1,13 @@
 import { AppDataSource } from "@infrastructure/mysql/connection";
 import fastify from "fastify";
+import FastifyUserRoute from "adapters/inbound/http/routes/User";
 
 const server = fastify({
-    logger:{
-        transport:{
-            target:"pino-pretty"
-        }
-    }
+  logger: {
+    transport: {
+      target: "pino-pretty",
+    },
+  },
 });
 AppDataSource.initialize()
   .then(() => {
@@ -16,9 +17,8 @@ AppDataSource.initialize()
     console.error("Error during Data Source initialization", err);
     throw new Error("Failed to initialize database"); // Throw an error if initialization fails
   });
-server.get("/ping", async (request, reply) => {
-  return "pong\n";
-});
+
+server.register(FastifyUserRoute);
 
 server.listen({ port: 8080 }, (err, address) => {
   if (err) {

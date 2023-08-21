@@ -11,7 +11,12 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "baseUrl": "./src",
-    "paths": { "@infrastructure/*": ["./infrastructure/*"] }
+    "paths": { 
+      "@infrastructure/*": ["./infrastructure/*"], 
+      "@domain/*": ["./domain/*"], 
+      "@application/*": ["./application/*"], 
+      "@adapters/*": ["./adapters/*"], 
+    }
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "mql5"]
