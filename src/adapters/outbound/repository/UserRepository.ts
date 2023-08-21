@@ -1,12 +1,15 @@
 import { AppDataSource } from "@infrastructure/mysql/connection";
 import * as UserDto from "@domain/model/User/User"
-import { User } from "@domain/entity/User";
+import { User } from "@domain/entity/User/User";
+import { DeletedUser } from "@domain/entity/User/DeletedUser";
 
 const dataSource = AppDataSource;
 const UserRepository = dataSource.getRepository(User)
 
-export async function DBGetAllUser() {
-  const users = await UserRepository.find()
+export async function DBGetAllActiveUser() {
+  const users = await UserRepository.createQueryBuilder("user")
+    .where("user.isDeleted IS NULL")
+    .getMany();
   return users;
 }
 
@@ -24,4 +27,38 @@ export async function DBCreateUser(user: UserDto.CreateUserRequest) {
     console.error(error)
     return error
   }
+}
+
+export async function DBSoftDeleteUser(id: number) {
+  const deletedUserRepository = dataSource.getRepository(DeletedUser);
+  const userRepository = dataSource.getRepository(User);
+
+  const user = await userRepository.findOne({ where: { id: id } });
+  console.log({user, id})
+  if (!user) {
+    return "User not found"
+  } else if (user && !user.isDeleted) {
+    const alreadyDeleted = await deletedUserRepository.findOne({ where: { userId: user.id } });
+    console.log({ alreadyDeleted })
+    if (!alreadyDeleted) {
+      const deletedUser = new DeletedUser();
+      deletedUser.userId = user.id;
+      deletedUser.deletedAt = new Date();
+
+      await deletedUserRepository.save(deletedUser);
+
+      user.isDeleted = true;
+      await userRepository.save(user);
+      return deletedUser;
+    }
+  } else if (user.isDeleted) {
+    return "User is already deleted"
+  }
+}
+
+export async function DBGetAllDeletedUser() {
+  const users = await UserRepository.createQueryBuilder("user")
+    .where("user.isDeleted = :isDeleted", {isDeleted:true})
+    .getMany();
+  return users;
 }

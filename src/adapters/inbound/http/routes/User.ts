@@ -12,12 +12,22 @@ const routes: RouteOptions[] = [
   {
     method: ["GET"],
     url: "/api/v1/user",
-    handler: UserController.prototype.GetAllUser
+    handler: UserController.prototype.GetAllActiveUser
   },
   {
     method: ["POST"],
     url: "/api/v1/user",
     handler: UserController.prototype.CreateUser
+  },
+  {
+    method: ["DELETE"],
+    url: "/api/v1/user",
+    handler: UserController.prototype.DeleteUser
+  },
+  {
+    method: ["GET"],
+    url: "/api/v1/deleted-user",
+    handler: UserController.prototype.GetAllDeletedUser
   }
 ];
 
