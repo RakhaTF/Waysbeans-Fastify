@@ -29,7 +29,6 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => DeletedUser)
-  @JoinColumn()
+  @OneToOne(() => DeletedUser, deletedUser => deletedUser.user)
   deletedUser: DeletedUser;
 }

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { User } from "./User";
 
 @Entity()
 export class DeletedUser {
@@ -10,4 +11,8 @@ export class DeletedUser {
 
     @Column()
     deletedAt: Date;
+    
+    @OneToOne(() => User, user => user.deletedUser)
+    @JoinColumn()
+    user: User;
 }
