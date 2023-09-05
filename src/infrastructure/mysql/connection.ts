@@ -11,5 +11,6 @@ export const AppDataSource = new DataSource({
   entities: ["src/domain/entity/**/*.ts"],
   migrations: ["src/migration/**/*.ts"],
   migrationsTableName: "custom_migration_table",
+  timezone: "+07:00",
   synchronize:true,
 });

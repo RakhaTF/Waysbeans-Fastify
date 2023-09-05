@@ -1,12 +1,16 @@
 import { FastifyInstance, FastifyPluginOptions, RouteOptions } from "fastify";
+import ProductController from "../controller/ProductController";
 
 const routes: RouteOptions[] = [
     {
         method: ["GET"],
-        url: "/api/v1/product-test",
-        handler: async (request, reply) => {
-            reply.send("Hello World");
-        },
+        url: "/api/v1/product",
+        handler: ProductController.prototype.getAllProduct
+    },
+    {
+        method: ["POST"],
+        url: "/api/v1/product",
+        handler: ProductController.prototype.createNewProduct
     },
 ]
 

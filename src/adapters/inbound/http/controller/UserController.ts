@@ -3,7 +3,7 @@ import * as UserService from "@application/service/UserApplicationService"
 import * as UserDto from "@domain/model/User/User"
 import { User } from "@domain/entity/User/User";
 import * as UserSchema from "helpers/JoiSchema/User";
-import { DeletedUser } from "@domain/entity/User/DeletedUser";
+import createResult from "helpers/CreateResult";
 
 export default class UserController {
   async GetAllActiveUser() {
@@ -30,14 +30,15 @@ export default class UserController {
         }));
         return { message: "Validation errors", data: errorMessages };
       }
-
-      const newUser = await UserService.CreateUser({ firstName, lastName, age, email });
-
-      if (newUser.email !== email) {
-        return { message: "USER CREATED", data: newUser };
+      
+      const existingUser = await UserService.GetOneUser(email)
+      if(existingUser && existingUser.email === email){
+        return { message: "USER ALREADY EXISTS", data: existingUser };
       } else {
-        return { message: "USER ALREADY EXISTS", data: newUser };
+        const newUser = await UserService.CreateUser({ firstName, lastName, age, email });
+        return { message: "USER CREATED", data: newUser };
       }
+
     } catch (error) {
       console.error(error);
       return { message: "Error occurred", data: null };
@@ -67,8 +68,4 @@ export default class UserController {
       console.error(error)
     }
   }
-}
-
-function createResult(message?: any, data?: string | string[] | User) {
-  return { message, data };
 }

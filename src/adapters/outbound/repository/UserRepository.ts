@@ -34,12 +34,10 @@ export async function DBSoftDeleteUser(id: number) {
   const userRepository = dataSource.getRepository(User);
 
   const user = await userRepository.findOne({ where: { id: id } });
-  console.log({user, id})
   if (!user) {
     return "User not found"
   } else if (user && !user.isDeleted) {
     const alreadyDeleted = await deletedUserRepository.findOne({ where: { userId: user.id } });
-    console.log({ alreadyDeleted })
     if (!alreadyDeleted) {
       const deletedUser = new DeletedUser();
       deletedUser.userId = user.id;
@@ -62,3 +60,5 @@ export async function DBGetAllDeletedUser() {
     .getMany();
   return users;
 }
+
+export const DBGetOneUser = async (email: string): Promise<User> => await UserRepository.findOne({ where: { email: email } })

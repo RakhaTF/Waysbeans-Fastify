@@ -2,6 +2,7 @@ import { AppDataSource } from "@infrastructure/mysql/connection";
 import fastify from "fastify";
 import ProductRoute from "@adapters/inbound/http/routes/Product";
 import UserRoute from "adapters/inbound/http/routes/User";
+import { AMQPClient, AMQPError } from "@cloudamqp/amqp-client";
 
 const server = fastify({
   logger: {
@@ -20,6 +21,8 @@ AppDataSource.initialize()
   });
 server.register(UserRoute);
 server.register(ProductRoute);
+
+
 
 server.listen({ port: 8080 }, (err, address) => {
   if (err) {

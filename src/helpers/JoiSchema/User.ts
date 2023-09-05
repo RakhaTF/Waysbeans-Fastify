@@ -7,7 +7,7 @@ export const Register = Joi.object({
     lastName: Joi.string().alphanum().min(3).required().messages({
         'any.required': 'Last name is required',
     }),
-    age: Joi.number().required().messages({
+    age: Joi.number().min(5).required().messages({
         'any.required': 'Age is required',
     }),
     email: Joi.string().email().required().messages({
