@@ -52,3 +52,9 @@ export const GetOneUser = async (email: string): Promise<User> => {
         return error
     }
 }
+
+export const UpdateUser = async (params: UserDto.UpdateUserParams) =>{
+    const updateUser = await UserDomainService.UpdateUser(params)
+    console.log(updateUser)
+    return updateUser
+}

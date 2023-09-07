@@ -56,9 +56,26 @@ export async function DBSoftDeleteUser(id: number) {
 
 export async function DBGetAllDeletedUser() {
   const users = await UserRepository.createQueryBuilder("user")
-    .where("user.isDeleted = :isDeleted", {isDeleted:true})
+    .where("user.isDeleted = :isDeleted", { isDeleted: true })
     .getMany();
   return users;
 }
 
 export const DBGetOneUser = async (email: string): Promise<User> => await UserRepository.findOne({ where: { email: email } })
+
+export const DBUpdateUser = async ({ user_id, firstName, lastName, age, email }: UserDto.UpdateUserParams) => {
+  //Checking if user send any data to the request body
+  if (firstName || lastName || age || email) {
+    let updateData: Partial<User> = {};
+    if (firstName) updateData.firstName = firstName;
+    if (lastName) updateData.lastName = lastName;
+    if (age) updateData.age = age;
+    if (email) updateData.email = email;
+
+    return await UserRepository.createQueryBuilder()
+      .update(User)
+      .set(updateData)
+      .where("id = :id", { id: user_id })
+      .execute();
+  }
+}
