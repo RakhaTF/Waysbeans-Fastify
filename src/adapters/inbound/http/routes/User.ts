@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions, RouteOptions } from "fastify";
 import UserController from "../controller/UserController";
 
+
 const routes: RouteOptions[] = [
   {
     method: ["GET"],
@@ -12,22 +13,27 @@ const routes: RouteOptions[] = [
   {
     method: ["GET"],
     url: "/api/v1/user",
-    handler: UserController.prototype.GetAllActiveUser
+    handler: UserController.GetAllActiveUser
   },
   {
     method: ["POST"],
     url: "/api/v1/user",
-    handler: UserController.prototype.CreateUser
+    handler: UserController.CreateUser
+  },
+  {
+    method: ["PATCH"],
+    url: "/api/v1/user",
+    handler: UserController.UpdateUser
   },
   {
     method: ["DELETE"],
     url: "/api/v1/user",
-    handler: UserController.prototype.DeleteUser
+    handler: UserController.DeleteUser
   },
   {
     method: ["GET"],
     url: "/api/v1/deleted-user",
-    handler: UserController.prototype.GetAllDeletedUser
+    handler: UserController.GetAllDeletedUser
   }
 ];
 

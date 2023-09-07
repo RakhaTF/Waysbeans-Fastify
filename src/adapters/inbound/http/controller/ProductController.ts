@@ -5,7 +5,7 @@ import createResult from "helpers/CreateResult"
 import * as ProductSchema from "helpers/JoiSchema/Product";
 
 export default class ProductController {
-    async getAllProduct() {
+    static async getAllProduct() {
         try {
             const products = await ProductService.GetAllProduct()
             const results = createResult(products)
@@ -15,7 +15,7 @@ export default class ProductController {
         }
     }
 
-    async createNewProduct(request: FastifyRequest) {
+    static async createNewProduct(request: FastifyRequest) {
         try {
             const { name, price, stock, description, photo } = request.body as ProductDto.CreateProductRequest
 

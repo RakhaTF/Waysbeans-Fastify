@@ -5,12 +5,12 @@ const routes: RouteOptions[] = [
     {
         method: ["GET"],
         url: "/api/v1/product",
-        handler: ProductController.prototype.getAllProduct
+        handler: ProductController.getAllProduct
     },
     {
         method: ["POST"],
         url: "/api/v1/product",
-        handler: ProductController.prototype.createNewProduct
+        handler: ProductController.createNewProduct
     },
 ]
 

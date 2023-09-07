@@ -6,7 +6,7 @@ import * as UserSchema from "helpers/JoiSchema/User";
 import createResult from "helpers/CreateResult";
 
 export default class UserController {
-  async GetAllActiveUser() {
+  static async GetAllActiveUser() {
     try {
       const users = await UserService.GetAllActiveUser()
       const results = createResult(users)
@@ -16,7 +16,7 @@ export default class UserController {
     }
   }
 
-  async CreateUser(request: FastifyRequest): Promise<{ message: string, data: any }> {
+  static async CreateUser(request: FastifyRequest) {
     try {
       const { firstName, lastName, age, email } = request.body as UserDto.CreateUserRequest;
 
@@ -30,9 +30,9 @@ export default class UserController {
         }));
         return { message: "Validation errors", data: errorMessages };
       }
-      
+
       const existingUser = await UserService.GetOneUser(email)
-      if(existingUser && existingUser.email === email){
+      if (existingUser && existingUser.email === email) {
         return { message: "USER ALREADY EXISTS", data: existingUser };
       } else {
         const newUser = await UserService.CreateUser({ firstName, lastName, age, email });
@@ -45,7 +45,7 @@ export default class UserController {
     }
   }
 
-  async DeleteUser(request: FastifyRequest) {
+  static async DeleteUser(request: FastifyRequest) {
     try {
       const { id } = request.body as User
       const deletedUser = await UserService.DeleteUser(id)
@@ -59,11 +59,22 @@ export default class UserController {
     }
   }
 
-  async GetAllDeletedUser(){
+  static async GetAllDeletedUser() {
     try {
       const users = await UserService.GetAllDeletedUser()
       const results = createResult(users)
       return results
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  static async UpdateUser(request: FastifyRequest) {
+    const { user_id, firstName, lastName, age, email } = request.body as UserDto.UpdateUserRequest;
+    try {
+      console.log({ user_id });
+      const updateUser = await UserService.UpdateUser({ user_id, firstName, lastName, age, email })
+      return updateUser
     } catch (error) {
       console.error(error)
     }
