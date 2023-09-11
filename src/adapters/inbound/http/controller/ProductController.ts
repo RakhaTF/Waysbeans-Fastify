@@ -5,7 +5,7 @@ import createResult from "helpers/CreateResult"
 import * as ProductSchema from "helpers/JoiSchema/Product";
 
 export default class ProductController {
-    static async getAllProduct() {
+    static async GetAllProduct() {
         try {
             const products = await ProductService.GetAllProduct()
             const results = createResult(products)
@@ -15,7 +15,7 @@ export default class ProductController {
         }
     }
 
-    static async createNewProduct(request: FastifyRequest) {
+    static async CreateProduct(request: FastifyRequest) {
         try {
             const { name, price, stock, description, photo } = request.body as ProductDto.CreateProductRequest
 
@@ -29,9 +29,18 @@ export default class ProductController {
                 }));
                 return { message: "Validation errors", data: errorMessages };
             }
-            console.log({ name, price, stock, description, photo })
+
+            const existingProduct = await ProductService.GetOneProduct(name)
+            if (existingProduct && existingProduct.name === name) {
+                return { message: "PRODUCT ALREADY EXISTS", data: existingProduct };
+            } else {
+                const newUser = await ProductService.CreateProduct({ price, stock, description, name, photo });
+                return { message: "PRODUCT CREATED", data: newUser };
+            }
+
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            return { message: "Error occurred", data: null };
         }
     }
 }

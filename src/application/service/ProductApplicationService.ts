@@ -1,3 +1,4 @@
+import { Product } from "@domain/entity/Product"
 import * as ProductDto from "@domain/model/Product/Product"
 import * as ProductDomainService from "@domain/service/Product/ProductDomainService"
 
@@ -13,6 +14,18 @@ export async function GetAllProduct() {
     return results
 }
 
-export const CreateNewProduct = async (params: ProductDto.CreateProductRequest) => {
-    console.log({ params })
+export const CreateProduct = async (params: ProductDto.CreateProductRequest) => {
+    try {
+        return await ProductDomainService.CreateProduct(params)
+    } catch (error) {
+        return error
+    }
+}
+
+export const GetOneProduct = async (name: string): Promise<Product> => {
+    try {
+        return await ProductDomainService.GetOneProduct(name)
+    } catch (error) {
+        return error
+    }
 }

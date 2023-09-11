@@ -5,7 +5,7 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: "name", type: "varchar" })
+  @Column({ name: "name", type: "varchar", unique: true })
   name: string;
 
   @Column({ type: "decimal", precision: 2, name: "price" })
