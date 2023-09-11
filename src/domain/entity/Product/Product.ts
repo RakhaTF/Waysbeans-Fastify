@@ -8,7 +8,7 @@ export class Product {
   @Column({ name: "name", type: "varchar", unique: true })
   name: string;
 
-  @Column({ type: "decimal", precision: 2, name: "price" })
+  @Column({ type: "integer", name: "price" })
   price: number;
 
   @Column({ type: "int", name: "stock" })

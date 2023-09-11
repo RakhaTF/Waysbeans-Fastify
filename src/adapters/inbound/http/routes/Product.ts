@@ -12,6 +12,11 @@ const routes: RouteOptions[] = [
         url: "/api/v1/product",
         handler: ProductController.CreateProduct
     },
+    {
+        method: ["DELETE"],
+        url: "/api/v1/product",
+        handler: ProductController.DeleteProduct
+    },
 ]
 
 export default async function ProductRoute(

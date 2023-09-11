@@ -4,10 +4,10 @@ export const NewProduct = Joi.object({
     name: Joi.string().alphanum().min(1).required().messages({
         'any.required': 'name is required',
     }),
-    price: Joi.number().min(1).required().messages({
+    price: Joi.number().integer().min(1).required().messages({
         'any.required': 'price is required',
     }),
-    stock: Joi.number().min(1).required().messages({
+    stock: Joi.number().integer().min(1).required().messages({
         'any.required': 'stock is required',
     }),
     description: Joi.string().min(1).max(255).required().messages({
