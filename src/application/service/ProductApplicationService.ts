@@ -20,6 +20,11 @@ export const CreateProduct = async (params: ProductDto.CreateProductRequest) => 
     try {
         // Validate the request body
         const { error } = ProductSchema.NewProduct.validate({ name, price, stock, description, photo });
+        const existingProduct = await ProductDomainService.GetOneProductByName(name)
+        
+        if (existingProduct && existingProduct.name === name) {
+            return { message: "PRODUCT ALREADY EXISTS", data: existingProduct };
+        }
 
         if (error) {
             const errorMessages = error.details.map((detail) => ({
@@ -28,15 +33,13 @@ export const CreateProduct = async (params: ProductDto.CreateProductRequest) => 
             }));
             return { error: "Validation errors", data: errorMessages };
         }
-        const new_product = await ProductDomainService.CreateProduct(params)
-        return { message: "PRODUCT CREATED", data: new_product }
+        const newProduct = await ProductDomainService.CreateProduct(params)
+        return { message: "PRODUCT CREATED", data: newProduct }
     } catch (error) {
         return error
     }
 }
 
-export const GetOneProductByName = async (product_name: string): Promise<Product> => await ProductDomainService.GetOneProductByName(product_name)
-
 export const DeleteProduct = async (id: number) => {
-    return await ProductDomainService.GetOneProductById(id)
+    return await ProductDomainService.DeleteProduct(id)
 }

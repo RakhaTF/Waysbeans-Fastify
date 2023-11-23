@@ -2,7 +2,7 @@ import { AppDataSource } from "@infrastructure/mysql/connection";
 import fastify from "fastify";
 import ProductRoute from "@adapters/inbound/http/routes/Product";
 import UserRoute from "adapters/inbound/http/routes/User";
-import { AMQPClient, AMQPError } from "@cloudamqp/amqp-client";
+import fastifyFormbody from "@fastify/formbody";
 
 const server = fastify({
   logger: {
@@ -19,6 +19,8 @@ AppDataSource.initialize()
     console.error("Error during Data Source initialization", err);
     throw new Error("Failed to initialize database"); // Throw an error if initialization fails
   });
+
+server.register(fastifyFormbody)
 server.register(UserRoute);
 server.register(ProductRoute);
 

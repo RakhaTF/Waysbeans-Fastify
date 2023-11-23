@@ -13,4 +13,6 @@ export const AppDataSource = new DataSource({
   migrationsTableName: "custom_migration_table",
   timezone: "+07:00",
   synchronize:true,
+  logging:true,
+  logger:'file'
 });

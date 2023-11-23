@@ -18,6 +18,6 @@ export const DBGetOneProductByName = async (product_name: string): Promise<Produ
 
 export const DBGetOneProductById = async (product_id: number): Promise<Product> => await ProductRepository.findOneBy({ id: product_id })
 
-export const DBDeleteProduct = async (product: Product) => await ProductRepository.delete(product)
+export const DBDeleteProduct = async (id: number) => await ProductRepository.delete(id)
 
 export const DBInsertProductToTrash = async (product: Product) => await DeletedProductRepository.save(product)

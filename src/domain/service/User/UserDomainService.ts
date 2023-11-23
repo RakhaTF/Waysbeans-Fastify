@@ -1,17 +1,44 @@
 import * as UserRepository from "@adapters/outbound/repository/UserRepository"
+import { User } from "@domain/entity/User/User"
 import * as UserDto from "@domain/model/User/User"
 
-export const GetAllActiveUser = async () => await UserRepository.DBGetAllActiveUser()
+export const CreateUser = async (user: UserDto.CreateUserParams) => await UserRepository.DBCreateUser(user)
 
-export const CreateUser = async (user: UserDto.CreateUserRequest) => await UserRepository.DBCreateUser(user)
+export const DeleteUserDomain = async (user: User) => {
+    await UserRepository.DBDeleteUserAndInsertIntoDelete(user)
+}
 
-export const DeleteUser = async (id: number) => await UserRepository.DBSoftDeleteUser(id)
+export const GetAllDeletedUser = async () => await UserRepository.DBGetAllDeletedUsers()
 
-export const GetAllDeletedUser = async () => await UserRepository.DBGetAllDeletedUser()
+export async function GetAllUsersDomain() {
+    return await UserRepository.DBGetAllUsers();
+}
 
-export const GetOneUser = async (email: string) => await UserRepository.DBGetOneUser(email)
+export const GetUserDomain = async (params: { email?: string, id?: number }): Promise<User> => {
+    if (params.email) {
+        const user = await UserRepository.DBGetOneUser({ email: params.email });
+        if (!user) {
+            throw new Error("User Not Found!")
+        }
+        return user
+    } else if (params.id) {
+        const user = await UserRepository.DBGetOneUser({ id: params.id });
+        if (!user) {
+            throw new Error("User Not Found!")
+        }
+        return user
+    } else {
+        throw new Error("Either email or id must be provided");
+    }
+}
 
-export const UpdateUser = async (params: UserDto.UpdateUserParams) => {
-    const {user_id, firstName, lastName, age, email} = params
-    return await UserRepository.DBUpdateUser({ user_id, firstName, lastName, age, email })
+export const UpdateUser = async (updateParams: UserDto.UpdateUserParams) => {
+    const updateUser = await UserRepository.DBUpdateUser(updateParams)
+    if (updateUser.affected < 1) {
+        throw new Error("Failed To Update User");
+    }
+}
+
+export const GetDeletedUserDomain = async (id: number) => {
+    return await UserRepository.DBGetDeletedUser(id)
 }

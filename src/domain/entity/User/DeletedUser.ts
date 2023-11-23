@@ -1,18 +1,33 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
-import { User } from "./User";
+import { Entity, Column, PrimaryColumn } from "typeorm";
+import { IsEmail } from "class-validator";
 
 @Entity()
 export class DeletedUser {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: number;
 
     @Column()
-    userId: number;
+    firstName: string;
 
     @Column()
-    deletedAt: Date;
-    
-    @OneToOne(() => User, user => user.deletedUser)
-    @JoinColumn()
-    user: User;
+    lastName: string;
+
+    @Column()
+    @IsEmail()
+    email: string;
+
+    @Column()
+    age: number;
+
+    @Column({
+        type: 'int',
+        width: 10,
+    })
+    createdAt: number;
+
+    @Column({
+        type: 'int',
+        width: 10,
+    })
+    updatedAt: number;
 }

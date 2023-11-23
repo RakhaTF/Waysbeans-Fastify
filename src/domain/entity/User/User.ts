@@ -1,6 +1,6 @@
 import { IsEmail } from "class-validator";
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from "typeorm";
-import { DeletedUser } from "./DeletedUser";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+
 
 @Entity()
 export class User {
@@ -20,21 +20,15 @@ export class User {
   @Column()
   age: number;
 
-  @Column({ nullable: true })
-  isDeleted: boolean;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    precision: 3
+  @Column({
+    type: 'int',
+    width: 10,
   })
-  createdAt: Date;
+  createdAt: number;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    precision: 3
+  @Column({
+    type: 'int',
+    width: 10,
   })
-  updatedAt: Date;
-
-  @OneToOne(() => DeletedUser, deletedUser => deletedUser.user)
-  deletedUser: DeletedUser;
+  updatedAt: number;
 }
