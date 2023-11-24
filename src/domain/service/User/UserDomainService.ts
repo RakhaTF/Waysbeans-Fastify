@@ -16,17 +16,9 @@ export async function GetAllUsersDomain() {
 
 export const GetUserDomain = async (params: { email?: string, id?: number }): Promise<User> => {
     if (params.email) {
-        const user = await UserRepository.DBGetOneUser({ email: params.email });
-        if (!user) {
-            throw new Error("User Not Found!")
-        }
-        return user
+        return await UserRepository.DBGetOneUser({ email: params.email });
     } else if (params.id) {
-        const user = await UserRepository.DBGetOneUser({ id: params.id });
-        if (!user) {
-            throw new Error("User Not Found!")
-        }
-        return user
+        return await UserRepository.DBGetOneUser({ id: params.id });
     } else {
         throw new Error("Either email or id must be provided");
     }
@@ -41,4 +33,12 @@ export const UpdateUser = async (updateParams: UserDto.UpdateUserParams) => {
 
 export const GetDeletedUserDomain = async (id: number) => {
     return await UserRepository.DBGetDeletedUser(id)
+}
+
+export const CheckUserExistsDomain = async (email: string) => {
+    const user = await UserRepository.DBCheckUserExists(email);
+    if (!user) {
+        throw new Error("Data not found!")
+    }
+    return user;
 }

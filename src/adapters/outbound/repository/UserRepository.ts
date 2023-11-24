@@ -39,6 +39,12 @@ export const DBUpdateUser = async (updateParams: UserDto.UpdateUserParams) => {
 }
 
 export async function DBGetDeletedUser(id: number) {
-  const deletedUserRepository = dataSource.getRepository(DeletedUser);
-  return await deletedUserRepository.findOne({ where: { id } });
+  return await DeletedUserRepository.findOne({ where: { id } });
+}
+
+export async function DBCheckUserExists(email: string) {
+    return await UserRepository.createQueryBuilder("user")
+        .select("user.password")
+        .where("user.email = :email", { email })
+        .getOne();
 }

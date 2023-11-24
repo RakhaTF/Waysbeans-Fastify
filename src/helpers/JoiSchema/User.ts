@@ -7,6 +7,9 @@ export const Register = Joi.object({
     lastName: Joi.string().alphanum().min(3).required().messages({
         'any.required': 'Last name is required',
     }),
+    password: Joi.string().alphanum().min(8).required().messages({
+        'any.required': 'Password is required',
+    }),
     age: Joi.number().min(5).required().messages({
         'any.required': 'Age is required',
     }),
@@ -23,11 +26,24 @@ export const UpdateUser = Joi.object({
     lastName: Joi.string().alphanum().min(3).required().messages({
         'any.required': 'Last name is required',
     }),
+    password: Joi.string().alphanum().min(8).required().messages({
+        'any.required': 'Password is required',
+    }),
     age: Joi.number().min(5).required().messages({
         'any.required': 'Age is required',
     }),
     email: Joi.string().email().required().messages({
         'any.required': 'Email is required',
         'string.email': 'Email must be a valid email',
+    }),
+}).options({ abortEarly: false });
+
+export const Login = Joi.object({
+    email: Joi.string().email().required().messages({
+        'any.required': 'Email is required',
+        'string.email': 'Email must be a valid email',
+    }),
+    password: Joi.string().alphanum().min(8).required().messages({
+        'any.required': 'Password is required',
     }),
 }).options({ abortEarly: false });

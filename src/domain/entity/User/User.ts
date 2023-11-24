@@ -20,6 +20,9 @@ export class User {
   @Column()
   age: number;
 
+  @Column()
+  password: string;
+
   @Column({
     type: 'int',
     width: 10,

@@ -1,7 +1,8 @@
 import { AppDataSource } from "@infrastructure/mysql/connection";
 import fastify from "fastify";
 import ProductRoute from "@adapters/inbound/http/routes/Product";
-import UserRoute from "adapters/inbound/http/routes/User";
+import UserRoute from "@adapters/inbound/http/routes/User";
+import AuthRoute from "@adapters/inbound/http/routes/Auth";
 import fastifyFormbody from "@fastify/formbody";
 
 const server = fastify({
@@ -21,6 +22,7 @@ AppDataSource.initialize()
   });
 
 server.register(fastifyFormbody)
+server.register(AuthRoute);
 server.register(UserRoute);
 server.register(ProductRoute);
 

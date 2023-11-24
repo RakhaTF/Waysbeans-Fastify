@@ -1,8 +1,9 @@
 export type CreateUserRequest = {
     firstName: string;
     lastName: string;
-    age: number;
     email: string;
+    age: number;
+    password: string;
 }
 
 export type CreateUserParams = CreateUserRequest & {
@@ -21,3 +22,10 @@ export type UpdateUserRequest = {
 export type UpdateUserParams = UpdateUserRequest & {
     updatedAt: number;
 }
+
+export type LoginRequest = {
+    email: string;
+    password: string;
+}
+
+export type LoginParams = LoginRequest
