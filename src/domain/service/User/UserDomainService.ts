@@ -1,6 +1,8 @@
 import * as UserRepository from "@adapters/outbound/repository/UserRepository"
 import { User } from "@domain/entity/User/User"
 import * as UserDto from "@domain/model/User/User"
+import jwt from 'jsonwebtoken'
+import { env } from "process"
 
 export const CreateUser = async (user: UserDto.CreateUserParams) => await UserRepository.DBCreateUser(user)
 
@@ -37,8 +39,12 @@ export const GetDeletedUserDomain = async (id: number) => {
 
 export const CheckUserExistsDomain = async (email: string) => {
     const user = await UserRepository.DBCheckUserExists(email);
-    if (!user) {
-        throw new Error("Data not found!")
+    if (user.length < 1) {
+        throw new Error("Account not found!")
     }
-    return user;
+    return user[0];
+}
+
+export const AuthUserDomain = async (token: string) => {
+    return jwt.verify(token, env.SECRET_KEY)
 }

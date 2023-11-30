@@ -43,8 +43,9 @@ export async function DBGetDeletedUser(id: number) {
 }
 
 export async function DBCheckUserExists(email: string) {
-    return await UserRepository.createQueryBuilder("user")
-        .select("user.password")
-        .where("user.email = :email", { email })
-        .getOne();
+  return await UserRepository.manager.query<User[]>(`
+    SELECT 
+    u.id, u.firstname, u.lastname, u.email, u.password, u.age, u.createdAt as register_time
+    FROM user u
+    WHERE u.email = ?`, [email])
 }

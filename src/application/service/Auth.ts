@@ -2,7 +2,8 @@ import * as UserDto from "@domain/model/User/User"
 import * as UserSchema from "helpers/JoiSchema/User";
 import * as UserDomainService from "@domain/service/User/UserDomainService"
 import moment from 'moment'
-
+import jwt from 'jsonwebtoken'
+import { env } from "process";
 export async function Register(params: UserDto.CreateUserRequest) {
     const { firstName, lastName, age, email, password } = params
     const { error } = UserSchema.Register.validate({ firstName, lastName, age, email, password });
@@ -12,7 +13,7 @@ export async function Register(params: UserDto.CreateUserRequest) {
             path: detail.path.join('.'),
             message: detail.message
         }));
-        throw { message: "Validation errors", data: errorMessages };
+        return { message: "Validation errors", data: errorMessages };
     }
 
     const existingUser = await UserDomainService.GetUserDomain({ email })
@@ -23,7 +24,7 @@ export async function Register(params: UserDto.CreateUserRequest) {
     return await UserDomainService.CreateUser({ ...params, createdAt: moment().unix(), updatedAt: moment().unix() });
 }
 
-export async function Login(params:  UserDto.LoginParams) {
+export async function Login(params: UserDto.LoginParams) {
     const { email, password } = params
     const { error } = UserSchema.Login.validate({ email, password });
 
@@ -32,15 +33,25 @@ export async function Login(params:  UserDto.LoginParams) {
             path: detail.path.join('.'),
             message: detail.message
         }));
-        throw { message: "Validation errors", data: errorMessages };
+        return { message: "Validation errors", data: errorMessages };
     }
 
-    const checkPassword = await UserDomainService.CheckUserExistsDomain(email)
-    
-    if(checkPassword !== password){
-        throw new Error("Password doesn't match!")
+    const existingUser = await UserDomainService.CheckUserExistsDomain(email)
+    if (!existingUser || existingUser.password !== password) {
+        throw new Error("Wrong password!")
+    }
+    // ** This is our JWT Token
+    const token = jwt.sign(
+        { _id: existingUser.id, email: existingUser.email }, env.SECRET_KEY,
+        { expiresIn: "1d" }
+    );
+    return { ...existingUser, token };
+}
+
+export async function AuthUser(token: string) {
+    if (!token) {
+        throw new Error("Unauthorized!")
     }
 
-
-
+    return await UserDomainService.AuthUserDomain(token)
 }

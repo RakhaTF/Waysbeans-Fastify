@@ -1,11 +1,13 @@
 import { FastifyInstance, FastifyPluginOptions, RouteOptions } from "fastify";
 import UserController from "../controller/UserController";
-
+import { CheckAuth } from "helpers/Auth";
+import { BasePaginationResultSchema, ResponseSchema } from "helpers/ApiSchema/ApiSchema";
 
 const routes: RouteOptions[] = [
   {
     method: ["GET"],
     url: "/api/v1/test",
+    preHandler: CheckAuth,
     handler: async (request, reply) => {
       reply.send("Hello World");
     },
@@ -13,7 +15,13 @@ const routes: RouteOptions[] = [
   {
     method: ["GET"],
     url: "/api/v1/user/list",
-    handler: UserController.GetAllActiveUser
+    handler: UserController.GetAllActiveUser,
+    schema: {
+      description: "Users List",
+      tags: ["Client"],
+      summary: "Get Users List",
+      response: BasePaginationResultSchema
+    }
   },
   {
     method: ["POST"],

@@ -8,8 +8,7 @@ export default class UserController {
   static async GetAllActiveUser() {
     try {
       const users = await UserService.GetAllActiveUser()
-      const results = createResult(users)
-      return results
+      return { message: users }
     } catch (error) {
       throw error
     }

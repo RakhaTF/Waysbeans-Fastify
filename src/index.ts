@@ -1,9 +1,9 @@
 import { AppDataSource } from "@infrastructure/mysql/connection";
 import fastify from "fastify";
-import ProductRoute from "@adapters/inbound/http/routes/Product";
-import UserRoute from "@adapters/inbound/http/routes/User";
-import AuthRoute from "@adapters/inbound/http/routes/Auth";
-import fastifyFormbody from "@fastify/formbody";
+import FastifyRouteAddon from "@application/boot/fastify/route";
+import FastifySwaggerAddon from "./application/boot/fastify/swagger"
+import FastifyBaseAddon from "./application/boot/fastify/base"
+
 
 const server = fastify({
   logger: {
@@ -12,6 +12,10 @@ const server = fastify({
     },
   },
 });
+
+
+
+
 AppDataSource.initialize()
   .then(() => {
     console.log("Data Source has been initialized!");
@@ -21,11 +25,9 @@ AppDataSource.initialize()
     throw new Error("Failed to initialize database"); // Throw an error if initialization fails
   });
 
-server.register(fastifyFormbody)
-server.register(AuthRoute);
-server.register(UserRoute);
-server.register(ProductRoute);
-
+server.register(FastifyBaseAddon)
+server.register(FastifySwaggerAddon)
+server.register(FastifyRouteAddon)
 
 
 server.listen({ port: 8080 }, (err, address) => {
